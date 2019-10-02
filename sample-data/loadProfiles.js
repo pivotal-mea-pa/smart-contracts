@@ -1,5 +1,19 @@
+var cfenv = require("cfenv");
+var appEnv = cfenv.getAppEnv()
+var mongoCFUrl = appEnv.getServiceURL('smart-contracts-mongodb');
+var url = 'mongodb://localhost:27017/';
+
+if (mongoCFUrl != null) {
+  console.log('mongoCFUrl detected = ' + mongoCFUrl)
+	url=mongoCFUrl;
+}
+
+mongoose
+  .connect(url, { useNewUrlParser: true  ,useUnifiedTopology: true})
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
 const mongo = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017/';
 
 const myFunc = async () => {
   let client = await mongo.connect(url);

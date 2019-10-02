@@ -17,14 +17,26 @@ const awards = require('./routes/api/awards');
 const bonds = require('./routes/api/bonds');
 const refunds = require('./routes/api/refunds');
 const bids = require('./routes/api/bids');
+var cfenv = require("cfenv");
 
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 
-const db = require('./config/keys').mongoURI;
+var db = require('./config/keys').mongoURI;
+console.log('Mongo URL from properties= ' + db);
+
+var appEnv = cfenv.getAppEnv();
+var mongoCFUrl = appEnv.getServiceURL('smart-contracts-mongodb');
+
+if (mongoCFUrl != null) {
+  console.log('mongoCFUrl detected = ' + mongoCFUrl)
+	db=mongoCFUrl;
+}
+console.log('active mongo cf URL= ' + db);
+
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true  ,useUnifiedTopology: true})
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 

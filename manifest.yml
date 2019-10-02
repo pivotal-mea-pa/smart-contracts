@@ -1,0 +1,5 @@
+---
+applications:
+- name: smart-contracts-api
+  services:
+  - smart-contracts-mongodb
